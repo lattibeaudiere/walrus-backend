@@ -14,7 +14,7 @@ COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
 RUN mkdir -p /root/.sui && \
-    echo -e "keystore:\n  File: /root/.sui/sui.keystore\ndefault_context: devnet\nconfigs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"\n    environment: devnet\nactive_config: devnet\nactive_address: \"0x0\"" > /root/.sui/client_config.yaml && \
+    echo -e "system_object: 0x98ebc47370603fe81d9e15491b2f1443d619d1dab720d586e429ed233e1255c1\nstaking_object: 0x20266a17b4f1a216727f3eef5772f8d486a9e3b5e319af80a5b75809c035561d" > /root/.sui/client_config.yaml && \
     touch /root/.sui/sui.keystore
 RUN cat /root/.sui/client_config.yaml
 RUN walrus --version && \
