@@ -11,6 +11,7 @@ def list_origins():
     try:
         # Run the walrus CLI to list blobs
         result = subprocess.run(["walrus", "list-blobs"], capture_output=True, text=True)
+        logging.debug(f"walrus list-blobs output: {result.stdout}")
         blobs = []
         for line in result.stdout.splitlines():
             # Adjust this filter if your output format is different
