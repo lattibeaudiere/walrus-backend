@@ -13,11 +13,12 @@ RUN pip3 install -r requirements.txt
 COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
-RUN apt-get update && apt-get install -y curl -y
+RUN apt-get update && apt-get install -y curl yamllint -y
 RUN mkdir -p /root/.sui && \
-    curl https://raw.githubusercontent.com/MystenLabs/walrus-docs/main/docs/client_config.yaml -o /root/.sui/client_config.yaml && \
+    echo -e "keystore:\n  File: /root/.sui/sui.keystore\nconfigs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"\n    environment: devnet\nactive_config: devnet\nactive_address: \"0x0\"" > /root/.sui/client_config.yaml && \
     touch /root/.sui/sui.keystore
 RUN cat /root/.sui/client_config.yaml
+RUN yamllint /root/.sui/client_config.yaml
 RUN walrus --version && \
     walrus --config /root/.sui/client_config.yaml --help
 ENV XDG_CONFIG_HOME=/root/.sui
