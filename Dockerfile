@@ -13,7 +13,8 @@ RUN pip3 install -r requirements.txt
 COPY app.py .
 
 RUN echo "This is an example blob" > example.txt && \
-    walrus store --epochs 1 example.txt && \
-    walrus tag $(walrus store --epochs 1 example.txt | cut -d' ' -f1) origins
+    echo "" > client_config.yaml && \
+    walrus store --epochs 1 example.txt --config client_config.yaml && \
+    walrus tag $(walrus store --epochs 1 example.txt --config client_config.yaml | cut -d' ' -f1) origins
 
 CMD ["python3", "app.py"]
