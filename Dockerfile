@@ -13,7 +13,8 @@ RUN pip3 install -r requirements.txt
 COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
-RUN mkdir -p /root/.sui && echo "sui_network:\n  fullnode_rpc_url: \"https://fullnode.devnet.sui.io:443\"\n  faucet_url:  \"https://faucet.devnet.sui.io/gas\"" > /root/.sui/client_config.yaml
+RUN mkdir -p /root/.sui && echo -e "clients:\n  - alias: devnet\n    environment: devnet\n    fullnode: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"\nactive_client: devnet" > /root/.sui/client_config.yaml
+RUN cat /root/.sui/client_config.yaml
 ENV XDG_CONFIG_HOME=/root/.sui
 RUN walrus store --epochs 1 example.txt --config $XDG_CONFIG_HOME/client_config.yaml && \
     walrus tag $(walrus store --epochs 1 example.txt --config $XDG_CONFIG_HOME/client_config.yaml | cut -d' ' -f1) origins
