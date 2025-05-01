@@ -13,8 +13,9 @@ RUN pip3 install -r requirements.txt
 COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
+RUN apt-get update && apt-get install -y curl -y
 RUN mkdir -p /root/.sui && \
-    curl https://raw.githubusercontent.com/MystenLabs/walrus-docs/refs/heads/main/docs/client_config.yaml -o /root/.sui/client_config.yaml && \
+    curl https://raw.githubusercontent.com/MystenLabs/walrus-docs/main/docs/client_config.yaml -o /root/.sui/client_config.yaml && \
     touch /root/.sui/sui.keystore
 RUN cat /root/.sui/client_config.yaml
 RUN walrus --version && \
