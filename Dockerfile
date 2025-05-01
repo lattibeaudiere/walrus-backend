@@ -13,8 +13,9 @@ RUN pip3 install -r requirements.txt
 COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
-COPY sui_config /root/.sui/sui_config
+COPY c:/Users/R_Lat/Downloads/WalrusService/sui_config /root/.sui/sui_config
 ENV XDG_CONFIG_HOME=/root/.sui
+RUN echo "Invalidate cache" > /tmp/cache_invalidator
 RUN walrus store --epochs 1 example.txt --config $XDG_CONFIG_HOME/sui_config/client.yaml && \
     walrus tag $(walrus store --epochs 1 example.txt --config $XDG_CONFIG_HOME/sui_config/client.yaml | cut -d' ' -f1) origins
 
