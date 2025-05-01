@@ -19,6 +19,8 @@ def list_origins():
     except Exception as e:
         blobs = [f"Error: {e}"]
         logging.error(f"Error running walrus list-blobs: {e}")
+    if not blobs:
+        blobs = ["No blobs found or error occurred."]
 
     html = """
     <h1>Files Tagged with 'origins'</h1>
