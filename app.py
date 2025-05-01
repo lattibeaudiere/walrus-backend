@@ -13,12 +13,40 @@ logger = logging.getLogger(__name__)
 def list_origins():
     logger.debug("list_origins route called")
     try:
-        # Display a simple message since we can't use the Walrus CLI properly in this version
-        html = """
-        <h1>Walrus CLI Configuration</h1>
-        <p>The Walrus CLI version 1.22.1 has been configured with a basic Sui wallet.</p>
-        <p>However, this version doesn't fully support the blob operations we need.</p>
-        <p>Status: Configuration complete, but functionality limited by CLI version.</p>
+        # Try to list all blobs
+        result = subprocess.run(
+            ["walrus", "list-blobs"],
+            capture_output=True,
+            text=True,
+            check=False  # Don't raise exception on error
+        )
+        
+        if result.returncode == 0 and result.stdout.strip():
+            blobs = result.stdout.splitlines()
+            blob_list = "<ul>" + "".join([f"<li>{blob}</li>" for blob in blobs]) + "</ul>"
+        else:
+            error_msg = result.stderr if result.stderr else "No blobs found or command not supported"
+            blob_list = f"<p>Could not list blobs: {error_msg}</p>"
+        
+        # Try to store a blob directly from the endpoint
+        store_result = subprocess.run(
+            ["walrus", "store", "--epochs", "1", "/app/example.txt"],
+            capture_output=True,
+            text=True,
+            check=False  # Don't raise exception on error
+        )
+        
+        if store_result.returncode == 0:
+            store_message = f"<p>Successfully stored blob: {store_result.stdout}</p>"
+        else:
+            store_message = f"<p>Failed to store blob: {store_result.stderr}</p>"
+        
+        html = f"""
+        <h1>Walrus Blob Storage</h1>
+        <h2>Storage Test:</h2>
+        {store_message}
+        <h2>Existing Blobs:</h2>
+        {blob_list}
         """
         return render_template_string(html)
     except Exception as e:

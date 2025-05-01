@@ -15,5 +15,9 @@ envs:
     ws: ~
 " > /root/.sui/sui_config/client.yaml
 
+# Try to store the blob
+echo "Attempting to store a blob..."
+walrus store --epochs 1 /app/example.txt || echo "Failed to store blob"
+
 # Start Flask app
 exec python3 /app/app.py
