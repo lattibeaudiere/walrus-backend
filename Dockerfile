@@ -20,7 +20,6 @@ RUN cat /root/.sui/client_config.yaml
 RUN walrus --version && \
     walrus --config /root/.sui/client_config.yaml --help
 ENV XDG_CONFIG_HOME=/root/.sui
-RUN blob_id=$(walrus store --epochs 1 example.txt --config /root/.sui/client_config.yaml | cut -d' ' -f1) && \
-    walrus set-blob-attribute $blob_id origins true --config /root/.sui/client_config.yaml
+RUN blob_id=$(walrus store --epochs 1 example.txt --config /root/.sui/client_config.yaml | cut -d' ' -f1)
 
 CMD ["python3", "app.py"]
