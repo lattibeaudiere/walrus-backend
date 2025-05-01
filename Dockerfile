@@ -20,7 +20,8 @@ ENV XDG_CONFIG_HOME=/root/.sui
 
 # Create configuration
 RUN mkdir -p /root/.sui && \
-    printf "---\nenv: devnet\nactive_address: \"0x0\"\naccounts:\n  - address: \"0x0\"\n    key: \"\"\nclient_configs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"" > /root/.sui/client_config.yaml
+    echo "---\nenv: devnet\nactive_address: \"0x0\"\naccounts:\n  - address: \"0x0\"\n    key: \"\"\nclient_configs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"" > /tmp/client_config.yaml && \
+    cp /tmp/client_config.yaml /root/.sui/client_config.yaml
 
 # Verify configuration
 RUN cat /root/.sui/client_config.yaml && \
