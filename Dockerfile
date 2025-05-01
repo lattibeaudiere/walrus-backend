@@ -14,13 +14,13 @@ COPY app.py .
 
 RUN echo "This is an example blob" > example.txt
 RUN mkdir -p /root/.sui && \
-    echo -e "keystore:\n  File: /root/.sui/sui.keystore\nconfigs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"\n    environment: devnet\nactive_config: devnet\nactive_address: \"0x0\"" > /root/.sui/client_config.yaml && \
+    echo -e "keystore:\n  File: /root/.sui/sui.keystore\ndefault_context: devnet\nconfigs:\n  - alias: devnet\n    rpc: \"https://fullnode.devnet.sui.io:443\"\n    faucet: \"https://faucet.devnet.sui.io/gas\"\n    environment: devnet\nactive_config: devnet\nactive_address: \"0x0\"" > /root/.sui/client_config.yaml && \
     touch /root/.sui/sui.keystore
 RUN cat /root/.sui/client_config.yaml
 RUN walrus --version && \
     walrus --config /root/.sui/client_config.yaml --help
 ENV XDG_CONFIG_HOME=/root/.sui
 RUN blob_id=$(walrus store --epochs 1 example.txt --config /root/.sui/client_config.yaml | cut -d' ' -f1) && \
-    walrus tag $blob_id origins --config /root/.sui/client_config.yaml
+    walrus set-blob-attribute $blob_id origins true --config /root/.sui/client_config.yaml
 
 CMD ["python3", "app.py"]
