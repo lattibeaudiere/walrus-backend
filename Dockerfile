@@ -11,9 +11,10 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy application code and entrypoint
-COPY app.py .
+COPY . /app
+WORKDIR /app
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Set environment variable
 ENV XDG_CONFIG_HOME=/root/.sui

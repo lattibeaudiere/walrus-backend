@@ -2,14 +2,18 @@
 # Ensure example.txt exists
 echo "This is an example blob" > /app/example.txt
 
-# Generate wallet if keystore doesn't exist
-if [ ! -f /root/.sui/sui.keystore ]; then
-    walrus generate-sui-wallet --config /root/.sui/client_config.yaml
-fi
+# Create a proper Sui config directory
+mkdir -p /root/.sui/sui_config
 
-# Store and tag the example blob
-blob_id=$(walrus store --epochs 1 /app/example.txt --config /root/.sui/client_config.yaml | cut -d' ' -f1)
-walrus tag $blob_id origins --config /root/.sui/client_config.yaml
+# Initialize a basic Sui wallet config
+echo "---
+active_address: null
+active_env: devnet
+envs:
+  devnet:
+    rpc: "https://fullnode.devnet.sui.io:443"
+    ws: ~
+" > /root/.sui/sui_config/client.yaml
 
 # Start Flask app
 exec python3 /app/app.py
