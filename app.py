@@ -10,8 +10,8 @@ def list_origins():
     logging.debug("list_origins route called")
     try:
         # Run the walrus CLI to list blobs
-        result = subprocess.run(["walrus", "list-blobs"], capture_output=True, text=True)
-        logging.debug(f"walrus list-blobs output: {result.stdout}")
+        result = subprocess.run(["walrus", "--help"], capture_output=True, text=True)
+        logging.debug(f"walrus --help output: {result.stdout}")
         blobs = []
         for line in result.stdout.splitlines():
             # Adjust this filter if your output format is different
@@ -19,7 +19,7 @@ def list_origins():
                 blobs.append(line)
     except Exception as e:
         blobs = [f"Error: {e}"]
-        logging.error(f"Error running walrus list-blobs: {e}")
+        logging.error(f"Error running walrus --help: {e}")
     if not blobs:
         blobs = ["No blobs found or error occurred."]
 
