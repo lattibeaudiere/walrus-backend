@@ -2,18 +2,23 @@
 # Ensure example.txt exists
 echo "This is an example blob" > /app/example.txt
 
-# Create a proper Sui config directory
-mkdir -p /root/.sui/sui_config
+# Create config directory
+mkdir -p /root/.config/walrus
 
-# Initialize a basic Sui wallet config
-echo "---
-active_address: null
-active_env: devnet
-envs:
-  devnet:
-    rpc: "https://fullnode.devnet.sui.io:443"
-    ws: ~
-" > /root/.sui/sui_config/client.yaml
+# Initialize Walrus config
+echo "{
+  "contexts": {
+    "mainnet": {
+      "env": "mainnet",
+      "sui_rpc": "https://fullnode.mainnet.sui.io:443"
+    }
+  },
+  "active_context": "mainnet"
+}" > /root/.config/walrus/config.json
+
+# Generate a Sui wallet
+echo "Generating Sui wallet..."
+walrus generate-sui-wallet
 
 # Try to store the blob
 echo "Attempting to store a blob..."
